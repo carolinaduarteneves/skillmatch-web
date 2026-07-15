@@ -90,3 +90,19 @@ export class VagaFrontEnd extends Vaga {
     };
   }
 }
+
+// ============================================================
+// CLASSIFICAÇÃO (RF04)
+// ============================================================
+
+export function classificarCompatibilidade(percentual) {
+  if (percentual >= 80) {
+    return "Alta compatibilidade";
+  }
+
+  if (percentual >= 50) {
+    return "Média compatibilidade";
+  }
+
+  return "Baixa compatibilidade";
+}
