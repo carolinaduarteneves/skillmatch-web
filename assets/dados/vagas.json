@@ -1,0 +1,85 @@
+[
+  {
+    "id": 1,
+    "empresa": "Dev Solutions",
+    "cargo": "Desenvolvedor Front-End",
+    "requisitos": ["HTML", "CSS", "JavaScript", "DOM", "GitHub", "Responsividade", "Arrays", "Kanban", "React"],
+    "salario": 2000,
+    "modalidade": "Remoto",
+    "nivel": "Júnior"
+  },
+  {
+    "id": 2,
+    "empresa": "PixelCode",
+    "cargo": "Estagiário em Desenvolvimento Web",
+    "requisitos": ["HTML", "CSS", "JavaScript", "Objetos", "Funções", "Bootstrap"],
+    "salario": 2500,
+    "modalidade": "Híbrido"
+  },
+  {
+    "id": 3,
+    "empresa": "Tech Systems",
+    "cargo": "Assistente de Suporte Técnico",
+    "requisitos": ["Hardware", "Algoritmos", "Noções de Redes", "Resolução de Problemas"],
+    "salario": 2200,
+    "modalidade": "Presencial"
+  },
+  {
+    "id": 4,
+    "empresa": "PixelWave Studio",
+    "cargo": "Desenvolvedor Front-End",
+    "requisitos": ["HTML", "CSS", "JavaScript", "DOM", "Responsividade", "React", "GitHub", "Node.js"],
+    "salario": 4800,
+    "modalidade": "Remoto",
+    "nivel": "Pleno"
+  },
+  {
+    "id": 5,
+    "empresa": "TechStart",
+    "cargo": "Desenvolvedor Web Júnior",
+    "requisitos": ["HTML", "CSS", "JavaScript", "GitHub", "Lógica de Programação"],
+    "salario": 2800,
+    "modalidade": "Remoto"
+  },
+  {
+    "id": 6,
+    "empresa": "CodeLab",
+    "cargo": "Estagiário de Desenvolvimento Web",
+    "requisitos": ["HTML", "CSS", "JavaScript", "Kanban", "GitHub"],
+    "salario": 1800,
+    "modalidade": "Híbrido"
+  },
+  {
+    "id": 7,
+    "empresa": "WebSolutions",
+    "cargo": "Programador JavaScript Júnior",
+    "requisitos": ["JavaScript", "Arrays", "Objetos", "Funções", "DOM"],
+    "salario": 3000,
+    "modalidade": "Presencial"
+  },
+  {
+    "id": 8,
+    "empresa": "NovaWeb",
+    "cargo": "Desenvolvedor de Interfaces Web",
+    "requisitos": ["HTML", "CSS", "Responsividade", "Bootstrap", "Git"],
+    "salario": 2500,
+    "modalidade": "Remoto"
+  },
+  {
+    "id": 9,
+    "empresa": "ByteForge",
+    "cargo": "Estagiário de Desenvolvimento",
+    "requisitos": ["JavaScript", "HTML", "CSS", "Lógica de Programação", "Git"],
+    "salario": 2000,
+    "modalidade": "Presencial"
+  },
+  {
+    "id": 10,
+    "empresa": "InovaTech",
+    "cargo": "Desenvolvedor Front-End",
+    "requisitos": ["HTML", "CSS", "JavaScript", "GitHub", "Arrays", "React", "Node.js"],
+    "salario": 3500,
+    "modalidade": "Híbrido",
+    "nivel": "Júnior"
+  }
+]
