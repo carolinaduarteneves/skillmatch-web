@@ -106,3 +106,31 @@ export function classificarCompatibilidade(percentual) {
 
   return "Baixa compatibilidade";
 }
+
+// ============================================================
+// ANÁLISE GERAL DAS VAGAS
+// ============================================================
+
+export function analisarVagas(vagas, candidato) {
+  const resultados = vagas.map((vaga) => {
+    const resultadoCalculo = vaga.calcularCompatibilidade(candidato);
+
+    return {
+      vaga: vaga,
+      percentual: resultadoCalculo.percentual,
+      encontradas: resultadoCalculo.encontradas,
+      faltantes: resultadoCalculo.faltantes,
+    };
+  });
+
+  const melhor = resultados.reduce((atual, item) =>
+    item.percentual > atual.percentual ? item : atual,
+  );
+
+  const outras = resultados.filter((item) => item.vaga.id !== melhor.vaga.id);
+
+  return {
+    melhor: melhor,
+    outras: outras,
+  };
+}
