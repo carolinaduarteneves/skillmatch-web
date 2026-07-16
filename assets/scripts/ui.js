@@ -72,6 +72,21 @@ export function configurarFormulario(aoEnviar) {
     }
 
     caixaErro.textContent = "";
+
+    const candidato = {
+      nome: inputNome,
+      area: inputArea,
+      experienciaMeses: experienciaNumero,
+      // separa por vírgula OU quebra de linha: se o usuário digitar
+      // uma habilidade por linha, sem vírgula, o split(",") sozinho
+      // trataria o texto inteiro como uma única habilidade
+      habilidades: inputHabilidades
+        .split(/[,\n]+/)
+        .map((h) => h.trim())
+        .filter((h) => h.length > 0),
+    };
+
+    aoEnviar(candidato);
   });
 }
 
@@ -94,6 +109,7 @@ export function renderizarVagas(vagas, candidato) {
   const resultado = analisarVagas(vagas, candidato);
   const melhor = resultado.melhor;
 
+  container.appendChild(criarElementoPerfil(candidato));
   container.appendChild(criarElementoDestaque(melhor));
   container.appendChild(criarElementoRecomendacao(melhor.faltantes));
 
@@ -138,6 +154,40 @@ function criarElementoGrafico(percentual, classeExtra = "") {
   grafico.appendChild(valor);
 
   return grafico;
+}
+
+function criarElementoPerfil(candidato) {
+  const textoExperiencia =
+    candidato.experienciaMeses === 1
+      ? "1 mês de experiência"
+      : `${candidato.experienciaMeses} meses de experiência`;
+
+  const card = document.createElement("div");
+  card.classList.add("perfil-resumo");
+
+  const titulo = document.createElement("h3");
+  titulo.classList.add("perfil-resumo-titulo");
+  const icone = document.createElement("i");
+  icone.classList.add("fa-solid", "fa-circle-user");
+  icone.setAttribute("aria-hidden", "true");
+  titulo.appendChild(icone);
+  titulo.appendChild(document.createTextNode("Seu perfil"));
+  card.appendChild(titulo);
+
+  const linha = document.createElement("p");
+  linha.classList.add("perfil-resumo-linha");
+  linha.textContent = `${candidato.nome} · ${candidato.area} · ${textoExperiencia}`;
+  card.appendChild(linha);
+
+  const listaHabilidades = criarListaDeEtiquetas(candidato.habilidades);
+  listaHabilidades.classList.add("perfil-resumo-habilidades");
+  listaHabilidades.setAttribute(
+    "aria-label",
+    "Habilidades informadas pelo candidato",
+  );
+  card.appendChild(listaHabilidades);
+
+  return card;
 }
 
 function criarBlocoHabilidades(tituloTexto, itens, classeEtiqueta) {
