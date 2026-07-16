@@ -71,3 +71,17 @@ export function carregarPerfil() {
     return null;
   }
 }
+
+// ============================================================
+// PARTE 3 — PERSISTÊNCIA DO TEMA (localStorage)
+// ============================================================
+
+const CHAVE_TEMA = "temaSkillMatch";
+
+export function salvarTema(tema) {
+  localStorage.setItem(CHAVE_TEMA, tema);
+}
+
+export function carregarTema() {
+  return localStorage.getItem(CHAVE_TEMA);
+}
