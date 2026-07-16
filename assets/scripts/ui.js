@@ -5,6 +5,76 @@
 
 import { classificarCompatibilidade, analisarVagas } from "./motor.js";
 
+// ------------------------------------------------------------
+// REGEX de validação
+// ------------------------------------------------------------
+const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s']+$/;
+const regexArea = /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/;
+const regexHabilidades = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s,.-]+$/;
+
+// ============================================================
+// PARTE 1 — FORMULÁRIO E VALIDAÇÃO
+// ============================================================
+
+// "aoEnviar" é o callback (vindo do main.js) chamado quando o
+// formulário é validado com sucesso.
+export function configurarFormulario(aoEnviar) {
+  const formulario = document.getElementById("formulario-perfil");
+  const campoNome = document.getElementById("campo-nome");
+  const campoArea = document.getElementById("campo-area");
+  const campoExperiencia = document.getElementById("campo-experiencia");
+  const campoHabilidades = document.getElementById("campo-habilidades");
+  const caixaErro = document.getElementById("mensagens-erro");
+
+  formulario.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+
+    const inputNome = campoNome.value.trim();
+    const inputArea = campoArea.value.trim();
+    const inputExperiencia = campoExperiencia.value.trim();
+    const inputHabilidades = campoHabilidades.value.trim();
+
+    if (
+      inputNome === "" ||
+      inputNome.length < 3 ||
+      !regexNome.test(inputNome)
+    ) {
+      caixaErro.textContent = "Por favor insira um nome válido!";
+      return;
+    }
+    if (
+      inputArea === "" ||
+      inputArea.length < 3 ||
+      !regexArea.test(inputArea)
+    ) {
+      caixaErro.textContent = "Por favor insira uma área válida!";
+      return;
+    }
+    const experienciaNumero = Number(inputExperiencia);
+    if (
+      inputExperiencia === "" ||
+      isNaN(experienciaNumero) ||
+      !Number.isInteger(experienciaNumero) ||
+      experienciaNumero < 0
+    ) {
+      // reforça no JS o que o min="0" do HTML já sugere, e também
+      // exige número inteiro (meses não fazem sentido como 2.5)
+      caixaErro.textContent = "Por favor insira um número inteiro válido!";
+      return;
+    }
+    if (
+      inputHabilidades === "" ||
+      inputHabilidades.length < 3 ||
+      !regexHabilidades.test(inputHabilidades)
+    ) {
+      caixaErro.textContent = "Por favor insira suas habilidades!";
+      return;
+    }
+
+    caixaErro.textContent = "";
+  });
+}
+
 // ============================================================
 // RF05 — Melhor vaga + recomendação de estudo
 // ============================================================
