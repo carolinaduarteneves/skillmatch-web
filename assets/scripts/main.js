@@ -12,6 +12,14 @@ const contarAnalise = criarContadorDeAnalises();
 let vagasCarregadas = [];
 
 async function iniciar() {
+  const temaSalvo = carregarTema();
+  const temaInicial = temaSalvo === "escuro" ? "escuro" : "claro";
+
+  aplicarTema(temaInicial);
+  configurarBotaoTema((novoTema) => {
+    salvarTema(novoTema);
+  });
+
   // configurarFormulario precisa ser chamado sempre, independente
   // do resultado do fetch abaixo: é o preventDefault() dentro dele
   // que impede o navegador de fazer um submit nativo
