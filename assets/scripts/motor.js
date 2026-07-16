@@ -134,3 +134,16 @@ export function analisarVagas(vagas, candidato) {
     outras: outras,
   };
 }
+
+// ============================================================
+// CLOSURE (RF08)
+// ============================================================
+
+export function criarContadorDeAnalises() {
+  let total = 0;
+
+  return function () {
+    total++;
+    return total;
+  };
+}
