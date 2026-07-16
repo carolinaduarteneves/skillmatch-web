@@ -194,3 +194,12 @@ function criarElementoRecomendacao(faltantes) {
 
   return div;
 }
+
+// ============================================================
+// RF13 — mensagens de status (carregando / erro)
+// ============================================================
+
+export function exibirStatus(mensagem) {
+  const statusEl = document.getElementById("status");
+  statusEl.textContent = mensagem;
+}
