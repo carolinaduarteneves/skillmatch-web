@@ -106,14 +106,28 @@ export function renderizarVagas(vagas, candidato) {
     return;
   }
 
+  // regra de negócio (compatibilidade de cada vaga, melhor vaga,
+  // demais vagas) mora no motor.js; aqui só desenhamos o resultado
   const resultado = analisarVagas(vagas, candidato);
   const melhor = resultado.melhor;
+  const outras = resultado.outras;
 
   container.appendChild(criarElementoPerfil(candidato));
   container.appendChild(criarElementoDestaque(melhor));
-  container.appendChild(criarElementoRecomendacao(melhor.faltantes));
 
-  // TODO (feature/rf11-renderizacao-dom): renderizar a grade das outras vagas
+  const subtitulo = document.createElement("h3");
+  subtitulo.classList.add("painel-resultados-subtitulo");
+  subtitulo.textContent = "Outras vagas compatíveis";
+  container.appendChild(subtitulo);
+
+  const grade = document.createElement("ul");
+  grade.classList.add("grade-vagas");
+  outras.forEach((item) => {
+    grade.appendChild(criarElementoCard(item));
+  });
+  container.appendChild(grade);
+
+  container.appendChild(criarElementoRecomendacao(melhor.faltantes));
 }
 
 // ------------------------------------------------------------
@@ -277,6 +291,60 @@ function criarElementoDestaque(item) {
   article.appendChild(conteudo);
 
   return article;
+}
+
+function criarElementoCard(item) {
+  const vaga = item.vaga;
+  const percentual = item.percentual;
+  const encontradas = item.encontradas;
+  const faltantes = item.faltantes;
+
+  let classeNivel;
+  if (percentual >= 80) {
+    classeNivel = "alta";
+  } else if (percentual >= 50) {
+    classeNivel = "media";
+  } else {
+    classeNivel = "baixa";
+  }
+
+  const textoNivel = classificarCompatibilidade(percentual);
+
+  const li = document.createElement("li");
+  li.classList.add("cartao-vaga");
+
+  const empresa = document.createElement("h4");
+  empresa.classList.add("cartao-vaga-empresa");
+  empresa.textContent = vaga.empresa;
+  li.appendChild(empresa);
+
+  const cargo = document.createElement("p");
+  cargo.classList.add("cartao-vaga-cargo");
+  cargo.textContent = vaga.cargo;
+  li.appendChild(cargo);
+
+  li.appendChild(
+    criarElementoGrafico(percentual, `grafico-compatibilidade-${classeNivel}`),
+  );
+
+  const nivel = document.createElement("p");
+  nivel.classList.add("cartao-vaga-nivel", `cartao-vaga-nivel-${classeNivel}`);
+  nivel.textContent = textoNivel;
+  li.appendChild(nivel);
+
+  const modalidade = document.createElement("span");
+  modalidade.classList.add("etiqueta");
+  modalidade.textContent = vaga.modalidade;
+  li.appendChild(modalidade);
+
+  li.appendChild(
+    criarBlocoHabilidades("Encontradas", encontradas, "etiqueta-encontrada"),
+  );
+  li.appendChild(
+    criarBlocoHabilidades("Faltantes", faltantes, "etiqueta-faltante"),
+  );
+
+  return li;
 }
 
 function criarElementoRecomendacao(faltantes) {
