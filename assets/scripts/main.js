@@ -3,12 +3,33 @@
 // Responsabilidade deste módulo: ORQUESTRAR o fluxo da aplicação.
 // ============================================================
 
-import { buscarVagas, carregarPerfil } from "./dados.js";
-import { exibirStatus } from "./ui.js";
+import { buscarVagas, salvarPerfil, carregarPerfil } from "./dados.js";
+import { criarContadorDeAnalises } from "./motor.js";
+import { configurarFormulario, renderizarVagas, exibirStatus } from "./ui.js";
+
+const contarAnalise = criarContadorDeAnalises();
 
 let vagasCarregadas = [];
 
 async function iniciar() {
+  // configurarFormulario precisa ser chamado sempre, independente
+  // do resultado do fetch abaixo: é o preventDefault() dentro dele
+  // que impede o navegador de fazer um submit nativo
+  configurarFormulario((candidato) => {
+    if (vagasCarregadas.length === 0) {
+      exibirStatus(
+        "Não foi possível carregar as vagas. Tente novamente mais tarde.",
+      );
+      return;
+    }
+
+    salvarPerfil(candidato);
+    renderizarVagas(vagasCarregadas, candidato);
+    // console.log intencional: evidencia que o closure de
+    // criarContadorDeAnalises mantém estado entre chamadas (RF08)
+    console.log(`Análise nº ${contarAnalise()}`);
+  });
+
   exibirStatus("Carregando vagas…");
 
   try {
@@ -22,12 +43,11 @@ async function iniciar() {
     return;
   }
 
-  console.log("Vagas carregadas:", vagasCarregadas);
-
   const perfilSalvo = carregarPerfil();
 
   if (perfilSalvo) {
-    console.log("Perfil salvo encontrado:", perfilSalvo);
+    renderizarVagas(vagasCarregadas, perfilSalvo);
+    console.log(`Análise nº ${contarAnalise()}`);
   }
 }
 
