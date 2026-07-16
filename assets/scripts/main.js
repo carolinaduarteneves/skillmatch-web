@@ -3,9 +3,21 @@
 // Responsabilidade deste módulo: ORQUESTRAR o fluxo da aplicação.
 // ============================================================
 
-import { buscarVagas, salvarPerfil, carregarPerfil } from "./dados.js";
+import {
+  buscarVagas,
+  salvarPerfil,
+  carregarPerfil,
+  salvarTema,
+  carregarTema,
+} from "./dados.js";
 import { criarContadorDeAnalises } from "./motor.js";
-import { configurarFormulario, renderizarVagas, exibirStatus } from "./ui.js";
+import {
+  configurarFormulario,
+  renderizarVagas,
+  exibirStatus,
+  aplicarTema,
+  configurarBotaoTema,
+} from "./ui.js";
 
 const contarAnalise = criarContadorDeAnalises();
 
