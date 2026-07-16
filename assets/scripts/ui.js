@@ -391,3 +391,29 @@ export function exibirStatus(mensagem) {
   const statusEl = document.getElementById("status");
   statusEl.textContent = mensagem;
 }
+
+// ============================================================
+// PARTE 4 — TEMA CLARO/ESCURO
+// ============================================================
+
+export function aplicarTema(tema) {
+  document.documentElement.setAttribute("data-tema", tema);
+
+  const botao = document.getElementById("botao-tema");
+  const estaEscuro = tema === "escuro";
+  botao.setAttribute("aria-pressed", estaEscuro ? "true" : "false");
+}
+
+// "aoAlternar" é o callback (do main.js) que recebe o novo tema
+// escolhido, para ser persistido no localStorage.
+export function configurarBotaoTema(aoAlternar) {
+  const botao = document.getElementById("botao-tema");
+
+  botao.addEventListener("click", () => {
+    const temaAtual = document.documentElement.getAttribute("data-tema");
+    const novoTema = temaAtual === "escuro" ? "claro" : "escuro";
+
+    aplicarTema(novoTema);
+    aoAlternar(novoTema);
+  });
+}
