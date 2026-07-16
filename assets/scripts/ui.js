@@ -91,13 +91,16 @@ export function configurarFormulario(aoEnviar) {
 }
 
 // ============================================================
-// RF05 — Melhor vaga + recomendação de estudo
+// PARTE 2 — RENDERIZAÇÃO DOS RESULTADOS (destaque + cards + recomendação)
+// RF11: todo o conteúdo abaixo é criado com createElement + classList,
+// sem innerHTML.
 // ============================================================
 
 export function renderizarVagas(vagas, candidato) {
   const container = document.getElementById("lista-resultados");
   container.replaceChildren();
 
+  // estado "vazio" (RF13)
   if (vagas.length === 0) {
     const mensagemVazia = document.createElement("p");
     mensagemVazia.classList.add("lista-resultados-estado-vazio");
@@ -131,7 +134,7 @@ export function renderizarVagas(vagas, candidato) {
 }
 
 // ------------------------------------------------------------
-// Funções auxiliares (dependências necessárias pro destaque renderizar)
+// Funções auxiliares de renderização
 // ------------------------------------------------------------
 
 function criarListaDeEtiquetas(itens, classeExtra = "") {
@@ -158,7 +161,10 @@ function criarElementoGrafico(percentual, classeExtra = "") {
     grafico.classList.add(classeExtra);
   }
 
+  // --percentual é uma custom property que o conic-gradient do CSS
+  // usa para desenhar o anel proporcional
   grafico.style.setProperty("--percentual", percentual);
+
   grafico.setAttribute("role", "img");
   grafico.setAttribute("aria-label", `${percentual}% de compatibilidade`);
 
@@ -204,6 +210,8 @@ function criarElementoPerfil(candidato) {
   return card;
 }
 
+// bloco reaproveitado tanto para habilidades encontradas quanto
+// faltantes, no card de destaque e nos cards normais (RF11)
 function criarBlocoHabilidades(tituloTexto, itens, classeEtiqueta) {
   const bloco = document.createElement("div");
   bloco.classList.add("bloco-habilidades");
@@ -276,6 +284,8 @@ function criarElementoDestaque(item) {
 
   conteudo.appendChild(info);
 
+  // agrupa o círculo + a legenda numa coluna só, para os dois
+  // ficarem sempre alinhados entre si em qualquer breakpoint
   const colunaGrafico = document.createElement("div");
   colunaGrafico.classList.add("vaga-destaque-grafico-coluna");
   colunaGrafico.appendChild(
@@ -384,7 +394,7 @@ function criarElementoRecomendacao(faltantes) {
 }
 
 // ============================================================
-// RF13 — mensagens de status (carregando / erro)
+// PARTE 3 — STATUS (carregando / erro)
 // ============================================================
 
 export function exibirStatus(mensagem) {
