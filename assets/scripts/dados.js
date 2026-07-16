@@ -43,3 +43,45 @@ export async function buscarVagas() {
 
   return vagasInstanciadas;
 }
+
+// ============================================================
+// PARTE 2 — PERSISTÊNCIA DO PERFIL (localStorage, RF14)
+// ============================================================
+
+const CHAVE_PERFIL = "perfilCandidato";
+
+export function salvarPerfil(candidato) {
+  localStorage.setItem(CHAVE_PERFIL, JSON.stringify(candidato));
+}
+
+export function carregarPerfil() {
+  const dados = localStorage.getItem(CHAVE_PERFIL);
+
+  if (dados === null) {
+    return null;
+  }
+
+  // try/catch protege contra dado corrompido: se o texto salvo não
+  // for um JSON válido, JSON.parse quebraria a aplicação inteira
+  try {
+    return JSON.parse(dados);
+  } catch (erro) {
+    console.error("Perfil salvo inválido:", erro);
+    localStorage.removeItem(CHAVE_PERFIL);
+    return null;
+  }
+}
+
+// ============================================================
+// PARTE 3 — PERSISTÊNCIA DO TEMA (localStorage)
+// ============================================================
+
+const CHAVE_TEMA = "temaSkillMatch";
+
+export function salvarTema(tema) {
+  localStorage.setItem(CHAVE_TEMA, tema);
+}
+
+export function carregarTema() {
+  return localStorage.getItem(CHAVE_TEMA);
+}

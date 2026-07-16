@@ -3,7 +3,7 @@
 // Responsabilidade deste módulo: ORQUESTRAR o fluxo da aplicação.
 // ============================================================
 
-import { buscarVagas } from "./dados.js";
+import { buscarVagas, carregarPerfil } from "./dados.js";
 import { exibirStatus } from "./ui.js";
 
 let vagasCarregadas = [];
@@ -23,6 +23,12 @@ async function iniciar() {
   }
 
   console.log("Vagas carregadas:", vagasCarregadas);
+
+  const perfilSalvo = carregarPerfil();
+
+  if (perfilSalvo) {
+    console.log("Perfil salvo encontrado:", perfilSalvo);
+  }
 }
 
 iniciar();
