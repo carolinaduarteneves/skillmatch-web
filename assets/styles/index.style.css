@@ -14,6 +14,19 @@
   --cor-gradiente-fim: #2e1065;
 }
 
+[data-tema="escuro"] {
+  --cor-texto: #f1eefc;
+  --cor-texto-secundario: #b9b4cf;
+  --cor-fundo: #14111f;
+  --cor-fundo-secao: #1c1830;
+  --cor-borda: #322b4a;
+  --cor-primaria: #a78bfa;
+  --cor-primaria-hover: #c4b5fd;
+  --cor-etiqueta-fundo: #2f2750;
+  --cor-gradiente-inicio: #7c3aed;
+  --cor-gradiente-fim: #14111f;
+}
+
 /* =========================================================
    BASE
    ========================================================= */
