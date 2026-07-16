@@ -23,6 +23,10 @@ const contarAnalise = criarContadorDeAnalises();
 
 let vagasCarregadas = [];
 
+// ------------------------------------------------------------
+// Função principal: prepara a aplicação assim que a página carrega
+// ------------------------------------------------------------
+
 async function iniciar() {
   const temaSalvo = carregarTema();
   const temaInicial = temaSalvo === "escuro" ? "escuro" : "claro";
@@ -34,7 +38,8 @@ async function iniciar() {
 
   // configurarFormulario precisa ser chamado sempre, independente
   // do resultado do fetch abaixo: é o preventDefault() dentro dele
-  // que impede o navegador de fazer um submit nativo
+  // que impede o navegador de fazer um submit nativo (recarregando
+  // a página com os campos como query string na URL)
   configurarFormulario((candidato) => {
     if (vagasCarregadas.length === 0) {
       exibirStatus(

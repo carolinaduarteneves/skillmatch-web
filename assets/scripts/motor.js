@@ -25,7 +25,6 @@ export class Vaga {
     const encontradas = this.requisitos.filter((r) =>
       habilidadesNormalizadas.includes(r.toLowerCase()),
     );
-
     const faltantes = this.requisitos.filter(
       (r) => !habilidadesNormalizadas.includes(r.toLowerCase()),
     );
@@ -71,7 +70,6 @@ export class VagaFrontEnd extends Vaga {
     const encontradas = requisitosConsiderados.filter((r) =>
       habilidadesNormalizadas.includes(r.toLowerCase()),
     );
-
     const faltantes = requisitosConsiderados.filter(
       (r) => !habilidadesNormalizadas.includes(r.toLowerCase()),
     );

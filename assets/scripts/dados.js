@@ -1,12 +1,12 @@
 // ============================================================
 // dados.js
-// Responsabilidade deste módulo: carregar vagas (fetch).
+// Responsabilidade deste módulo: carregar vagas (fetch) + localStorage.
 // ============================================================
 
 import { Vaga, VagaFrontEnd } from "./motor.js";
 
 // ============================================================
-// RF13 — fetch das vagas
+// PARTE 1 — BUSCAR VAGAS (fetch + os 3 estados, RF13)
 // ============================================================
 
 export async function buscarVagas() {
@@ -30,7 +30,6 @@ export async function buscarVagas() {
         vaga.nivel,
       );
     }
-
     return new Vaga(
       vaga.id,
       vaga.empresa,
