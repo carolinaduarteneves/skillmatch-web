@@ -1,0 +1,936 @@
+/* =========================================================
+   VARIÁVEIS DE TEMA (claro = padrão, escuro = sobrescrita)
+   ========================================================= */
+:root {
+  --cor-texto: #1e1b2e;
+  --cor-texto-secundario: #5b5570;
+  --cor-fundo: #ffffff;
+  --cor-fundo-secao: #faf9fc;
+  --cor-borda: #e6e1f2;
+  --cor-primaria: #6d28d9;
+  --cor-primaria-hover: #7c3aed;
+  --cor-etiqueta-fundo: #ede9fe;
+  --cor-gradiente-inicio: #6d28d9;
+  --cor-gradiente-fim: #2e1065;
+}
+
+[data-tema="escuro"] {
+  --cor-texto: #f1eefc;
+  --cor-texto-secundario: #b9b4cf;
+  --cor-fundo: #14111f;
+  --cor-fundo-secao: #1c1830;
+  --cor-borda: #322b4a;
+  --cor-primaria: #a78bfa;
+  --cor-primaria-hover: #c4b5fd;
+  --cor-etiqueta-fundo: #2f2750;
+  --cor-gradiente-inicio: #7c3aed;
+  --cor-gradiente-fim: #14111f;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  color: var(--cor-texto);
+  background-color: var(--cor-fundo);
+  line-height: 1.5;
+  overflow-x: hidden;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
+.link-pular {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: #111;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  z-index: 1000;
+}
+
+.link-pular:focus {
+  left: 0;
+}
+
+.etiqueta {
+  display: inline-flex;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background-color: var(--cor-etiqueta-fundo);
+  color: var(--cor-primaria);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* mensagens de status (ex.: "Carregando vagas…") e de erro do
+   formulário, usadas via aria-live pelo ui.js */
+.mensagem-status {
+  color: var(--cor-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.mensagem-erro {
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* =========================================================
+   CABEÇALHO
+   MOBILE-FIRST: a base abaixo já é o layout do CELULAR
+   (empilhado, centralizado). O layout de tablet/desktop
+   (lado a lado) é ADICIONADO depois, via min-width.
+   ========================================================= */
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  padding: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cabecalho-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cabecalho-logo {
+  border-radius: 0.5rem;
+  max-height: 5.5rem;
+  width: auto;
+}
+
+.cabecalho-navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+  width: 100%;
+}
+
+.cabecalho-link {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.cabecalho-link:hover {
+  color: var(--cor-primaria);
+}
+
+.botao-tema {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--cor-etiqueta-fundo);
+  color: var(--cor-primaria);
+  font-size: 1rem;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.botao-tema:hover {
+  background-color: var(--cor-borda);
+}
+
+.botao-tema .icone-lua {
+  display: none;
+}
+
+[data-tema="escuro"] .botao-tema .icone-sol {
+  display: none;
+}
+
+[data-tema="escuro"] .botao-tema .icone-lua {
+  display: inline;
+}
+
+/* =========================================================
+   HERO
+   Base = 1 coluna, centralizado (celular).
+   ========================================================= */
+.hero {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  text-align: center;
+}
+
+.hero-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1.1 1 320px;
+  min-width: 0;
+}
+
+.hero-imagem {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+/* clamp(mínimo, preferido, máximo): tamanho de fonte fluido,
+   acompanha a largura da tela dentro de limites seguros */
+.hero-titulo {
+  font-size: clamp(2.25rem, 3.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--cor-texto);
+}
+
+.hero-titulo-destaque {
+  color: var(--cor-primaria);
+}
+
+.hero-descricao {
+  margin-top: 1.25rem;
+  max-width: 42ch;
+  color: var(--cor-texto-secundario);
+  font-size: 1.05rem;
+}
+
+.hero-botao {
+  margin-top: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: var(--cor-primaria);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.9rem 1.6rem;
+  border-radius: 0.65rem;
+}
+
+.hero-botao:hover {
+  background-color: var(--cor-primaria-hover);
+}
+
+.hero-imagem img {
+  border-radius: 1.5rem;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* =========================================================
+   SEÇÃO "COMO FUNCIONA"
+   ========================================================= */
+.secao-sobre {
+  background-color: var(--cor-fundo-secao);
+  padding: 3rem 1.25rem;
+  text-align: center;
+}
+
+.secao-sobre-titulo {
+  font-size: 1.85rem;
+  font-weight: 800;
+}
+
+.secao-sobre-titulo-destaque {
+  color: var(--cor-primaria);
+}
+
+.secao-sobre-descricao {
+  max-width: 640px;
+  margin: 0.85rem auto 0;
+  color: var(--cor-texto-secundario);
+}
+
+.cartoes-funcionalidades {
+  max-width: 1200px;
+  margin: 2.75rem auto 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.cartao-funcionalidade {
+  flex: 1 1 280px;
+  min-width: 0;
+  text-align: left;
+  background-color: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 1rem;
+  padding: 1.75rem;
+}
+
+.cartao-funcionalidade-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background-color: var(--cor-etiqueta-fundo);
+  color: var(--cor-primaria);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.cartao-funcionalidade-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.cartao-funcionalidade-descricao {
+  color: var(--cor-texto-secundario);
+  font-size: 0.92rem;
+}
+
+/* =========================================================
+   SEÇÃO DE BUSCA (formulário + resultados)
+   Base = 1 coluna (celular)
+   ========================================================= */
+.secao-busca {
+  padding: 3rem 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.secao-busca-grade {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+  align-items: flex-start;
+  background-color: var(--cor-fundo-secao);
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+}
+
+.painel-formulario {
+  flex: 0.85 1 320px;
+  min-width: 0;
+}
+
+.painel-resultados {
+  flex: 1.15 1 320px;
+  min-width: 0;
+}
+
+.painel-formulario,
+.painel-resultados {
+  background-color: var(--cor-fundo);
+  border-radius: 1rem;
+  border: 1px solid var(--cor-borda);
+  padding: 1.5rem;
+}
+
+.painel-formulario-titulo,
+.painel-resultados-titulo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--cor-primaria);
+  text-align: center;
+}
+
+.painel-resultados-titulo {
+  margin-bottom: 1.5rem;
+}
+
+.painel-formulario-descricao {
+  margin-top: 0.35rem;
+  color: var(--cor-texto-secundario);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.formulario-perfil {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formulario-perfil-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.formulario-perfil-rotulo {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.formulario-perfil-campo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.6rem;
+  padding: 0.7rem 0.9rem;
+}
+
+.formulario-perfil-campo:focus-within {
+  border-color: var(--cor-primaria-hover);
+  box-shadow: 0 0 0 3px var(--cor-etiqueta-fundo);
+}
+
+.formulario-perfil-campo i {
+  color: var(--cor-texto-secundario);
+}
+
+.formulario-perfil-campo input,
+.formulario-perfil-campo textarea {
+  border: none;
+  outline: none;
+  width: 100%;
+  font: inherit;
+  color: var(--cor-texto);
+  background: transparent;
+}
+
+.formulario-perfil-campo-textarea textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+.formulario-perfil-ajuda {
+  font-size: 0.78rem;
+  color: var(--cor-texto-secundario);
+}
+
+.formulario-perfil-botao {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background-color: var(--cor-primaria);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.85rem 1.5rem;
+  border-radius: 0.65rem;
+}
+
+.formulario-perfil-botao:hover {
+  background-color: var(--cor-primaria-hover);
+}
+
+/* ---------- Resultados ---------- */
+.painel-resultados-subtitulo {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1.75rem 0 1rem;
+}
+
+.perfil-resumo {
+  background-color: var(--cor-etiqueta-fundo);
+  border-radius: 1rem;
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.perfil-resumo-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--cor-primaria);
+}
+
+.perfil-resumo-linha {
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+  color: var(--cor-texto-secundario);
+}
+
+.perfil-resumo-habilidades {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* sem isso, a etiqueta ficaria com a mesma cor de fundo do card
+   (--cor-etiqueta-fundo), praticamente invisível */
+.perfil-resumo-habilidades .etiqueta {
+  text-transform: uppercase;
+  background-color: var(--cor-fundo);
+}
+
+.lista-resultados-estado-vazio {
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  padding: 3rem 1rem;
+  border: 1px dashed var(--cor-borda);
+  border-radius: 1rem;
+}
+
+/* Card de vaga em destaque — base = coluna, centralizado */
+.vaga-destaque {
+  background: linear-gradient(
+    135deg,
+    var(--cor-gradiente-inicio),
+    var(--cor-gradiente-fim)
+  );
+  color: #ffffff;
+  border-radius: 1rem;
+  padding: 1.75rem 2rem;
+}
+
+.vaga-destaque-selo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fde68a;
+  margin-bottom: 0.75rem;
+}
+
+.vaga-destaque-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.vaga-destaque-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.vaga-destaque-empresa {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.vaga-destaque-cargo {
+  margin-top: 0.15rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+}
+
+.vaga-destaque .etiqueta {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* blocos de "Habilidades encontradas" e "Habilidades faltantes",
+   presentes em todo card (destaque e grade) */
+.bloco-habilidades {
+  margin-top: 0.75rem;
+}
+
+.bloco-habilidades-titulo {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.85;
+}
+
+.bloco-habilidades-vazio {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin-top: 0.25rem;
+}
+
+.lista-etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+/* variações visuais da .etiqueta padrão, pra diferenciar o que o
+   candidato já tem (verde) do que ainda falta (vermelho) */
+.etiqueta-encontrada {
+  background-color: rgba(22, 163, 74, 0.15);
+  color: #16a34a;
+}
+
+.etiqueta-faltante {
+  background-color: rgba(220, 38, 38, 0.12);
+  color: #7f1d1d;
+}
+
+/* dentro do card de destaque (fundo escuro/gradiente), as cores
+   acima perderiam contraste — usamos uma variação mais clara */
+.vaga-destaque .etiqueta-encontrada {
+  background-color: rgba(134, 239, 172, 0.25);
+  color: #bbf7d0;
+}
+
+.vaga-destaque .etiqueta-faltante {
+  background-color: rgba(252, 165, 165, 0.25);
+  color: #fecaca;
+}
+
+/* agrupa o círculo de compatibilidade + a legenda numa coluna só,
+   assim o texto de classificação fica sempre embaixo do círculo */
+.vaga-destaque-grafico-coluna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  flex-shrink: 0;
+}
+
+.vaga-destaque-legenda {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Grade de outras vagas — base = 1 coluna (celular) */
+.grade-vagas {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+}
+
+.cartao-vaga {
+  flex: 1 1 220px;
+  min-width: 0;
+  text-align: center;
+  border: 1px solid var(--cor-borda);
+  border-radius: 1rem;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cartao-vaga-empresa {
+  font-weight: 800;
+  font-size: 0.95rem;
+  align-self: center;
+  text-align: center;
+}
+
+.cartao-vaga-cargo {
+  align-self: center;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--cor-texto-secundario);
+  margin-bottom: 0.5rem;
+}
+
+.cartao-vaga-nivel {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.cartao-vaga-nivel-alta {
+  color: #16a34a;
+}
+
+.cartao-vaga-nivel-media {
+  color: #d97706;
+}
+
+.cartao-vaga-nivel-baixa {
+  color: #dc2626;
+}
+
+.cartao-vaga .etiqueta {
+  margin-top: 0.35rem;
+}
+
+/* Gráfico circular de compatibilidade (anel via conic-gradient) */
+.grafico-compatibilidade {
+  --cor-anel: var(--cor-primaria);
+  position: relative;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(
+    var(--cor-anel) calc(var(--percentual) * 1%),
+    var(--cor-etiqueta-fundo) 0
+  );
+}
+
+.grafico-compatibilidade::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background-color: var(--cor-fundo);
+}
+
+.grafico-compatibilidade-valor {
+  position: relative;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--cor-texto);
+}
+
+.grafico-compatibilidade-grande {
+  width: 6rem;
+  height: 6rem;
+  --cor-anel: #ffffff;
+  background: conic-gradient(
+    var(--cor-anel) calc(var(--percentual) * 1%),
+    rgba(255, 255, 255, 0.25) 0
+  );
+  flex-shrink: 0;
+}
+
+.grafico-compatibilidade-grande::before {
+  background-color: var(--cor-gradiente-inicio);
+  inset: 8px;
+}
+
+.grafico-compatibilidade-grande .grafico-compatibilidade-valor {
+  color: #ffffff;
+  font-size: 1.15rem;
+}
+
+.grafico-compatibilidade-alta {
+  --cor-anel: #16a34a;
+}
+
+.grafico-compatibilidade-media {
+  --cor-anel: #d97706;
+}
+
+.grafico-compatibilidade-baixa {
+  --cor-anel: #dc2626;
+}
+
+/* Recomendação de estudo — base = coluna, centralizado */
+.recomendacao-estudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  margin-top: 1.75rem;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--cor-etiqueta-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 1rem;
+}
+
+.recomendacao-estudo-icone {
+  color: var(--cor-primaria);
+  font-size: 1.3rem;
+}
+
+.recomendacao-estudo-conteudo {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.recomendacao-estudo-titulo {
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.recomendacao-estudo-texto {
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  color: var(--cor-texto-secundario);
+}
+
+.recomendacao-estudo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* mesmo problema de contraste do perfil-resumo: sem isso, a
+   etiqueta "some" dentro do fundo do card, que usa a mesma cor */
+.recomendacao-estudo-tags .etiqueta {
+  background-color: var(--cor-fundo);
+}
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+.rodape {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--cor-borda);
+  color: var(--cor-texto-secundario);
+  font-size: 0.85rem;
+}
+
+/* =========================================================================
+   RESPONSIVO — MOBILE FIRST (RF12)
+   Tudo ACIMA desta linha é o layout do CELULAR (a base/o padrão).
+   As media queries abaixo usam min-width e vão ADICIONANDO camadas
+   de layout conforme a tela cresce.
+   ========================================================================= */
+
+/* ---------- min-width: 641px (tablet) ---------- */
+@media (min-width: 641px) {
+  .cabecalho {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    padding: 1.25rem 2.5rem;
+  }
+
+  .cabecalho-navegacao {
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .hero,
+  .secao-busca {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .secao-sobre {
+    padding: 4rem 2.5rem;
+  }
+
+  .secao-busca-grade {
+    padding: 2.5rem;
+  }
+
+  .painel-formulario,
+  .painel-resultados {
+    padding: 2rem;
+  }
+
+  .painel-formulario-titulo,
+  .painel-formulario-descricao,
+  .painel-resultados-titulo {
+    text-align: left;
+  }
+
+  .vaga-destaque-conteudo {
+    text-align: left;
+  }
+
+  .vaga-destaque-conteudo .lista-etiquetas,
+  .vaga-destaque-conteudo .bloco-habilidades-titulo {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .vaga-destaque-selo {
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .cartao-vaga-empresa,
+  .cartao-vaga-cargo {
+    align-self: flex-start;
+    text-align: left;
+  }
+
+  .recomendacao-estudo {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .recomendacao-estudo-tags {
+    justify-content: flex-start;
+  }
+
+  .perfil-resumo {
+    text-align: left;
+  }
+
+  .perfil-resumo-titulo,
+  .perfil-resumo-habilidades {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- min-width: 961px (desktop) ----------
+   Aqui entram os layouts lado a lado (2 e 3 colunas), usando
+   Flexbox com flex-wrap — o flex-basis já definido nos itens
+   decide sozinho quantas colunas cabem. */
+@media (min-width: 961px) {
+  .hero {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .hero-conteudo {
+    align-items: flex-start;
+  }
+
+  .cartoes-funcionalidades,
+  .grade-vagas,
+  .secao-busca-grade {
+    flex-direction: row;
+  }
+
+  .vaga-destaque-conteudo {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

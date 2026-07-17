@@ -1,0 +1,429 @@
+// ============================================================
+// ui.js
+// Responsabilidade deste módulo: TELA.
+// ============================================================
+
+import { classificarCompatibilidade, analisarVagas } from "./motor.js";
+
+// ------------------------------------------------------------
+// REGEX de validação
+// ------------------------------------------------------------
+const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s']+$/;
+const regexArea = /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/;
+const regexHabilidades = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s,.-]+$/;
+
+// ============================================================
+// PARTE 1 — FORMULÁRIO E VALIDAÇÃO
+// ============================================================
+
+// "aoEnviar" é o callback (vindo do main.js) chamado quando o
+// formulário é validado com sucesso.
+export function configurarFormulario(aoEnviar) {
+  const formulario = document.getElementById("formulario-perfil");
+  const campoNome = document.getElementById("campo-nome");
+  const campoArea = document.getElementById("campo-area");
+  const campoExperiencia = document.getElementById("campo-experiencia");
+  const campoHabilidades = document.getElementById("campo-habilidades");
+  const caixaErro = document.getElementById("mensagens-erro");
+
+  formulario.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+
+    const inputNome = campoNome.value.trim();
+    const inputArea = campoArea.value.trim();
+    const inputExperiencia = campoExperiencia.value.trim();
+    const inputHabilidades = campoHabilidades.value.trim();
+
+    if (
+      inputNome === "" ||
+      inputNome.length < 3 ||
+      !regexNome.test(inputNome)
+    ) {
+      caixaErro.textContent = "Por favor insira um nome válido!";
+      return;
+    }
+    if (
+      inputArea === "" ||
+      inputArea.length < 3 ||
+      !regexArea.test(inputArea)
+    ) {
+      caixaErro.textContent = "Por favor insira uma área válida!";
+      return;
+    }
+    const experienciaNumero = Number(inputExperiencia);
+    if (
+      inputExperiencia === "" ||
+      isNaN(experienciaNumero) ||
+      !Number.isInteger(experienciaNumero) ||
+      experienciaNumero < 0
+    ) {
+      // reforça no JS o que o min="0" do HTML já sugere, e também
+      // exige número inteiro (meses não fazem sentido como 2.5)
+      caixaErro.textContent = "Por favor insira um número inteiro válido!";
+      return;
+    }
+    if (
+      inputHabilidades === "" ||
+      inputHabilidades.length < 3 ||
+      !regexHabilidades.test(inputHabilidades)
+    ) {
+      caixaErro.textContent = "Por favor insira suas habilidades!";
+      return;
+    }
+
+    caixaErro.textContent = "";
+
+    const candidato = {
+      nome: inputNome,
+      area: inputArea,
+      experienciaMeses: experienciaNumero,
+      // separa por vírgula OU quebra de linha: se o usuário digitar
+      // uma habilidade por linha, sem vírgula, o split(",") sozinho
+      // trataria o texto inteiro como uma única habilidade
+      habilidades: inputHabilidades
+        .split(/[,\n]+/)
+        .map((h) => h.trim())
+        .filter((h) => h.length > 0),
+    };
+
+    aoEnviar(candidato);
+  });
+}
+
+// ============================================================
+// PARTE 2 — RENDERIZAÇÃO DOS RESULTADOS (destaque + cards + recomendação)
+// RF11: todo o conteúdo abaixo é criado com createElement + classList,
+// sem innerHTML.
+// ============================================================
+
+export function renderizarVagas(vagas, candidato) {
+  const container = document.getElementById("lista-resultados");
+  container.replaceChildren();
+
+  // estado "vazio" (RF13)
+  if (vagas.length === 0) {
+    const mensagemVazia = document.createElement("p");
+    mensagemVazia.classList.add("lista-resultados-estado-vazio");
+    mensagemVazia.textContent = "Nada encontrado.";
+    container.appendChild(mensagemVazia);
+    return;
+  }
+
+  // regra de negócio (compatibilidade de cada vaga, melhor vaga,
+  // demais vagas) mora no motor.js; aqui só desenhamos o resultado
+  const resultado = analisarVagas(vagas, candidato);
+  const melhor = resultado.melhor;
+  const outras = resultado.outras;
+
+  container.appendChild(criarElementoPerfil(candidato));
+  container.appendChild(criarElementoDestaque(melhor));
+
+  const subtitulo = document.createElement("h3");
+  subtitulo.classList.add("painel-resultados-subtitulo");
+  subtitulo.textContent = "Outras vagas compatíveis";
+  container.appendChild(subtitulo);
+
+  const grade = document.createElement("ul");
+  grade.classList.add("grade-vagas");
+  outras.forEach((item) => {
+    grade.appendChild(criarElementoCard(item));
+  });
+  container.appendChild(grade);
+
+  container.appendChild(criarElementoRecomendacao(melhor.faltantes));
+}
+
+// ------------------------------------------------------------
+// Funções auxiliares de renderização
+// ------------------------------------------------------------
+
+function criarListaDeEtiquetas(itens, classeExtra = "") {
+  const lista = document.createElement("ul");
+  lista.classList.add("lista-etiquetas");
+
+  itens.forEach((item) => {
+    const li = document.createElement("li");
+    li.classList.add("etiqueta");
+    li.textContent = item;
+    if (classeExtra) {
+      li.classList.add(classeExtra);
+    }
+    lista.appendChild(li);
+  });
+
+  return lista;
+}
+
+function criarElementoGrafico(percentual, classeExtra = "") {
+  const grafico = document.createElement("div");
+  grafico.classList.add("grafico-compatibilidade");
+  if (classeExtra) {
+    grafico.classList.add(classeExtra);
+  }
+
+  // --percentual é uma custom property que o conic-gradient do CSS
+  // usa para desenhar o anel proporcional
+  grafico.style.setProperty("--percentual", percentual);
+
+  grafico.setAttribute("role", "img");
+  grafico.setAttribute("aria-label", `${percentual}% de compatibilidade`);
+
+  const valor = document.createElement("span");
+  valor.classList.add("grafico-compatibilidade-valor");
+  valor.textContent = `${percentual}%`;
+  grafico.appendChild(valor);
+
+  return grafico;
+}
+
+function criarElementoPerfil(candidato) {
+  const textoExperiencia =
+    candidato.experienciaMeses === 1
+      ? "1 mês de experiência"
+      : `${candidato.experienciaMeses} meses de experiência`;
+
+  const card = document.createElement("div");
+  card.classList.add("perfil-resumo");
+
+  const titulo = document.createElement("h3");
+  titulo.classList.add("perfil-resumo-titulo");
+  const icone = document.createElement("i");
+  icone.classList.add("fa-solid", "fa-circle-user");
+  icone.setAttribute("aria-hidden", "true");
+  titulo.appendChild(icone);
+  titulo.appendChild(document.createTextNode("Seu perfil"));
+  card.appendChild(titulo);
+
+  const linha = document.createElement("p");
+  linha.classList.add("perfil-resumo-linha");
+  linha.textContent = `${candidato.nome} · ${candidato.area} · ${textoExperiencia}`;
+  card.appendChild(linha);
+
+  const listaHabilidades = criarListaDeEtiquetas(candidato.habilidades);
+  listaHabilidades.classList.add("perfil-resumo-habilidades");
+  listaHabilidades.setAttribute(
+    "aria-label",
+    "Habilidades informadas pelo candidato",
+  );
+  card.appendChild(listaHabilidades);
+
+  return card;
+}
+
+// bloco reaproveitado tanto para habilidades encontradas quanto
+// faltantes, no card de destaque e nos cards normais (RF11)
+function criarBlocoHabilidades(tituloTexto, itens, classeEtiqueta) {
+  const bloco = document.createElement("div");
+  bloco.classList.add("bloco-habilidades");
+
+  const tituloBloco = document.createElement("p");
+  tituloBloco.classList.add("bloco-habilidades-titulo");
+  tituloBloco.textContent = tituloTexto;
+  bloco.appendChild(tituloBloco);
+
+  if (itens.length === 0) {
+    const vazio = document.createElement("p");
+    vazio.classList.add("bloco-habilidades-vazio");
+    vazio.textContent = "Nenhuma.";
+    bloco.appendChild(vazio);
+  } else {
+    bloco.appendChild(criarListaDeEtiquetas(itens, classeEtiqueta));
+  }
+
+  return bloco;
+}
+
+function criarElementoDestaque(item) {
+  const vaga = item.vaga;
+  const percentual = item.percentual;
+  const encontradas = item.encontradas;
+  const faltantes = item.faltantes;
+
+  const article = document.createElement("article");
+  article.classList.add("vaga-destaque");
+
+  const selo = document.createElement("span");
+  selo.classList.add("vaga-destaque-selo");
+  const iconeTrofeu = document.createElement("i");
+  iconeTrofeu.classList.add("fa-solid", "fa-trophy");
+  iconeTrofeu.setAttribute("aria-hidden", "true");
+  selo.appendChild(iconeTrofeu);
+  selo.appendChild(document.createTextNode(" Melhor oportunidade"));
+  article.appendChild(selo);
+
+  const conteudo = document.createElement("div");
+  conteudo.classList.add("vaga-destaque-conteudo");
+
+  const info = document.createElement("div");
+  info.classList.add("vaga-destaque-info");
+
+  const empresa = document.createElement("h3");
+  empresa.classList.add("vaga-destaque-empresa");
+  empresa.textContent = vaga.empresa;
+  info.appendChild(empresa);
+
+  const cargo = document.createElement("p");
+  cargo.classList.add("vaga-destaque-cargo");
+  cargo.textContent = vaga.cargo;
+  info.appendChild(cargo);
+
+  info.appendChild(
+    criarBlocoHabilidades(
+      "Habilidades encontradas",
+      encontradas,
+      "etiqueta-encontrada",
+    ),
+  );
+  info.appendChild(
+    criarBlocoHabilidades(
+      "Habilidades faltantes",
+      faltantes,
+      "etiqueta-faltante",
+    ),
+  );
+
+  conteudo.appendChild(info);
+
+  // agrupa o círculo + a legenda numa coluna só, para os dois
+  // ficarem sempre alinhados entre si em qualquer breakpoint
+  const colunaGrafico = document.createElement("div");
+  colunaGrafico.classList.add("vaga-destaque-grafico-coluna");
+  colunaGrafico.appendChild(
+    criarElementoGrafico(percentual, "grafico-compatibilidade-grande"),
+  );
+
+  const legenda = document.createElement("p");
+  legenda.classList.add("vaga-destaque-legenda");
+  legenda.textContent = classificarCompatibilidade(percentual);
+  colunaGrafico.appendChild(legenda);
+
+  conteudo.appendChild(colunaGrafico);
+  article.appendChild(conteudo);
+
+  return article;
+}
+
+function criarElementoCard(item) {
+  const vaga = item.vaga;
+  const percentual = item.percentual;
+  const encontradas = item.encontradas;
+  const faltantes = item.faltantes;
+
+  let classeNivel;
+  if (percentual >= 80) {
+    classeNivel = "alta";
+  } else if (percentual >= 50) {
+    classeNivel = "media";
+  } else {
+    classeNivel = "baixa";
+  }
+
+  const textoNivel = classificarCompatibilidade(percentual);
+
+  const li = document.createElement("li");
+  li.classList.add("cartao-vaga");
+
+  const empresa = document.createElement("h4");
+  empresa.classList.add("cartao-vaga-empresa");
+  empresa.textContent = vaga.empresa;
+  li.appendChild(empresa);
+
+  const cargo = document.createElement("p");
+  cargo.classList.add("cartao-vaga-cargo");
+  cargo.textContent = vaga.cargo;
+  li.appendChild(cargo);
+
+  li.appendChild(
+    criarElementoGrafico(percentual, `grafico-compatibilidade-${classeNivel}`),
+  );
+
+  const nivel = document.createElement("p");
+  nivel.classList.add("cartao-vaga-nivel", `cartao-vaga-nivel-${classeNivel}`);
+  nivel.textContent = textoNivel;
+  li.appendChild(nivel);
+
+  const modalidade = document.createElement("span");
+  modalidade.classList.add("etiqueta");
+  modalidade.textContent = vaga.modalidade;
+  li.appendChild(modalidade);
+
+  li.appendChild(
+    criarBlocoHabilidades("Encontradas", encontradas, "etiqueta-encontrada"),
+  );
+  li.appendChild(
+    criarBlocoHabilidades("Faltantes", faltantes, "etiqueta-faltante"),
+  );
+
+  return li;
+}
+
+function criarElementoRecomendacao(faltantes) {
+  const texto =
+    faltantes.length === 0
+      ? "Você já possui todas as habilidades exigidas pela vaga mais compatível."
+      : "Para aumentar sua compatibilidade, priorize estudar:";
+
+  const div = document.createElement("div");
+  div.classList.add("recomendacao-estudo");
+
+  const icone = document.createElement("i");
+  icone.classList.add("recomendacao-estudo-icone", "fa-solid", "fa-book-open");
+  icone.setAttribute("aria-hidden", "true");
+  div.appendChild(icone);
+
+  const conteudo = document.createElement("div");
+  conteudo.classList.add("recomendacao-estudo-conteudo");
+
+  const titulo = document.createElement("h3");
+  titulo.classList.add("recomendacao-estudo-titulo");
+  titulo.textContent = "Recomendação de estudo";
+  conteudo.appendChild(titulo);
+
+  const paragrafo = document.createElement("p");
+  paragrafo.classList.add("recomendacao-estudo-texto");
+  paragrafo.textContent = texto;
+  conteudo.appendChild(paragrafo);
+
+  const listaTags = criarListaDeEtiquetas(faltantes);
+  listaTags.classList.add("recomendacao-estudo-tags");
+  conteudo.appendChild(listaTags);
+
+  div.appendChild(conteudo);
+
+  return div;
+}
+
+// ============================================================
+// PARTE 3 — STATUS (carregando / erro)
+// ============================================================
+
+export function exibirStatus(mensagem) {
+  const statusEl = document.getElementById("status");
+  statusEl.textContent = mensagem;
+}
+
+// ============================================================
+// PARTE 4 — TEMA CLARO/ESCURO
+// ============================================================
+
+export function aplicarTema(tema) {
+  document.documentElement.setAttribute("data-tema", tema);
+
+  const botao = document.getElementById("botao-tema");
+  const estaEscuro = tema === "escuro";
+  botao.setAttribute("aria-pressed", estaEscuro ? "true" : "false");
+}
+
+// "aoAlternar" é o callback (do main.js) que recebe o novo tema
+// escolhido, para ser persistido no localStorage.
+export function configurarBotaoTema(aoAlternar) {
+  const botao = document.getElementById("botao-tema");
+
+  botao.addEventListener("click", () => {
+    const temaAtual = document.documentElement.getAttribute("data-tema");
+    const novoTema = temaAtual === "escuro" ? "claro" : "escuro";
+
+    aplicarTema(novoTema);
+    aoAlternar(novoTema);
+  });
+}

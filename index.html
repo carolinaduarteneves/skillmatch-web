@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SkillMatch | Compare seu perfil com vagas de Front-end e descubra o que estudar</title>
+  <meta name="description"
+    content="SkillMatch analisa suas habilidades e as compara com vagas de Front-end, mostrando seu percentual de compatibilidade e um plano de estudos personalizado para conquistar sua próxima oportunidade.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="assets/styles/index.style.css">
+</head>
+
+<body>
+
+  <a class="link-pular" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
+  <!-- ===================== CABEÇALHO ===================== -->
+  <header class="cabecalho">
+    <div class="cabecalho-marca">
+      <img class="cabecalho-logo" src="assets/img/logo.png" alt="Logo do SkillMatch">
+    </div>
+
+    <nav class="cabecalho-navegacao" aria-label="Navegação principal">
+      <a class="cabecalho-link" href="#sobre">Sobre</a>
+      <a class="cabecalho-link" href="#encontre-sua-vaga">Encontre sua vaga</a>
+      <button id="botao-tema" class="botao-tema" type="button" aria-pressed="false"
+        aria-label="Alternar entre tema claro e escuro">
+        <i class="icone-sol fa-solid fa-sun" aria-hidden="true"></i>
+        <i class="icone-lua fa-solid fa-moon" aria-hidden="true"></i>
+      </button>
+    </nav>
+  </header>
+
+  <main id="conteudo-principal">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" aria-labelledby="hero-titulo">
+      <div class="hero-conteudo">
+        <h1 class="hero-titulo" id="hero-titulo">
+          Encontre a vaga ideal para o
+          <span class="hero-titulo-destaque">seu perfil.</span>
+        </h1>
+
+        <p class="hero-descricao">
+          Descubra quais oportunidades combinam com suas habilidades, receba uma análise de compatibilidade
+          e saiba exatamente quais competências desenvolver para alcançar sua próxima oportunidade.
+        </p>
+
+        <a href="#encontre-sua-vaga" class="hero-botao">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          Encontrar minha vaga
+        </a>
+      </div>
+      <div class="hero-imagem">
+        <img src="assets/img/SkillMatch Web.png"
+          alt="Ilustração da plataforma SkillMatch Web com dashboard de vagas, editor de código e indicador de compatibilidade.">
+      </div>
+    </section>
+
+    <!-- ===================== COMO FUNCIONA ===================== -->
+    <section class="secao-sobre" id="sobre" aria-labelledby="secao-sobre-titulo">
+      <h2 class="secao-sobre-titulo" id="secao-sobre-titulo">
+        Como o <span class="secao-sobre-titulo-destaque">SkillMatch Web</span> funciona?
+      </h2>
+      <p class="secao-sobre-descricao">
+        Nossa plataforma utiliza tecnologia para comparar seu perfil com as melhores vagas de Front-end e te
+        ajudar a evoluir constantemente.
+      </p>
+
+      <ul class="cartoes-funcionalidades">
+        <li class="cartao-funcionalidade">
+          <i class="cartao-funcionalidade-icone fa-solid fa-bullseye" aria-hidden="true"></i>
+          <h3 class="cartao-funcionalidade-titulo">Compatibilidade Inteligente</h3>
+          <p class="cartao-funcionalidade-descricao">
+            Comparamos automaticamente suas habilidades com os requisitos de cada vaga.
+          </p>
+        </li>
+        <li class="cartao-funcionalidade">
+          <i class="cartao-funcionalidade-icone fa-solid fa-chart-simple" aria-hidden="true"></i>
+          <h3 class="cartao-funcionalidade-titulo">Análise Personalizada</h3>
+          <p class="cartao-funcionalidade-descricao">
+            Visualize suas habilidades encontradas, as competências que ainda faltam e o percentual de
+            compatibilidade.
+          </p>
+        </li>
+        <li class="cartao-funcionalidade">
+          <i class="cartao-funcionalidade-icone fa-solid fa-graduation-cap" aria-hidden="true"></i>
+          <h3 class="cartao-funcionalidade-titulo">Plano de Estudos</h3>
+          <p class="cartao-funcionalidade-descricao">
+            Receba recomendações de estudo personalizadas para evoluir seu perfil profissional.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ===================== FORMULÁRIO + RESULTADOS ===================== -->
+    <section class="secao-busca" id="encontre-sua-vaga" aria-labelledby="titulo-formulario">
+      <div class="secao-busca-grade">
+
+        <!-- ---------- Coluna esquerda: formulário ---------- -->
+        <div class="painel-formulario">
+          <h2 class="painel-formulario-titulo" id="titulo-formulario">Encontre sua vaga</h2>
+          <p class="painel-formulario-descricao" id="descricao-formulario">
+            Preencha seu perfil para iniciar a análise.
+          </p>
+
+          <form id="formulario-perfil" class="formulario-perfil" aria-describedby="descricao-formulario">
+            <div id="status" class="mensagem-status" aria-live="polite"></div>
+            <div class="formulario-perfil-grupo">
+              <label class="formulario-perfil-rotulo" for="campo-nome">Nome</label>
+              <div class="formulario-perfil-campo">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+                <input type="text" id="campo-nome" name="candidate-name" placeholder="Ex: Carolina" autocomplete="name"
+                  required />
+              </div>
+            </div>
+
+            <div class="formulario-perfil-grupo">
+              <label class="formulario-perfil-rotulo" for="campo-area">Área de interesse</label>
+              <div class="formulario-perfil-campo">
+                <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+                <input type="text" id="campo-area" name="candidate-area" placeholder="Ex: Front-end" required />
+              </div>
+            </div>
+
+            <div class="formulario-perfil-grupo">
+              <label class="formulario-perfil-rotulo" for="campo-experiencia">Experiência em meses</label>
+              <div class="formulario-perfil-campo">
+                <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                <input type="number" id="campo-experiencia" name="candidate-experience" min="0" placeholder="Ex: 4"
+                  required />
+              </div>
+            </div>
+
+            <div class="formulario-perfil-grupo">
+              <label class="formulario-perfil-rotulo" for="campo-habilidades">Habilidades</label>
+              <div class="formulario-perfil-campo formulario-perfil-campo-textarea">
+                <i class="fa-solid fa-code" aria-hidden="true"></i>
+                <textarea id="campo-habilidades" name="candidate-skills" aria-describedby="campo-habilidades-ajuda"
+                  placeholder="Ex: HTML, CSS, JavaScript, React, GitHub" required></textarea>
+              </div>
+              <p class="formulario-perfil-ajuda" id="campo-habilidades-ajuda">
+                Separe suas habilidades por vírgula.
+              </p>
+            </div>
+            <div id="mensagens-erro" class="mensagem-erro" aria-live="polite"></div>
+            <button type="submit" class="formulario-perfil-botao"
+              aria-label="Analisar vagas compatíveis com meu perfil">
+              <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+              Analisar vagas
+            </button>
+          </form>
+        </div>
+
+        <!-- ---------- Coluna direita: resultados ---------- -->
+        <div class="painel-resultados" aria-labelledby="titulo-resultados" aria-live="polite">
+          <h2 class="painel-resultados-titulo" id="titulo-resultados">Resultado da análise</h2>
+          <div id="lista-resultados" class="lista-resultados">
+            <p class="lista-resultados-estado-vazio">
+              Preencha o formulário para ver suas vagas compatíveis.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== RODAPÉ ===================== -->
+  <footer class="rodape">
+    <p class="rodape-creditos">Projeto desenvolvido para fins acadêmicos.</p>
+    <p class="rodape-copyright">&copy; 2026 SkillMatch Web. Todos os direitos reservados.</p>
+  </footer>
+  <script type="module" src="./assets/scripts/main.js"></script>
+
+</body>
+
+</html>
