@@ -2,9 +2,9 @@
 
 Aplicação web que compara o perfil de um candidato com vagas de tecnologia, calcula o percentual de compatibilidade entre eles e recomenda o que estudar para aumentar as chances de conseguir a vaga.
 
-🔗 **Deploy (GitHub Pages):** Em breve
-🎥 **Vídeo de apresentação:** Em breve
-📋 **Quadro Kanban (Trello):** Em breve
+🔗 **Deploy (GitHub Pages):** https://carolinaduarteneves.github.io/skillmatch-web/
+🎥 **Vídeo de apresentação:** https://youtu.be/1O4I-fDhfTg
+📋 **Quadro Kanban (Trello):** https://trello.com/invite/b/6a5146fb896fb9404a906e69/ATTI820d53054113e3b566011c7ed6cb9587B270928B/skillmatch-web
 
 ---
 
@@ -167,14 +167,14 @@ Este projeto utiliza módulos ES (`import`/`export`) e `fetch`. Por isso, ele n�
 
 Acesse a versão publicada:
 
-🔗 **Deploy:** *(link)*
+🔗 **Deploy:** https://carolinaduarteneves.github.io/skillmatch-web/
 
 ### Opção 2 — Live Server
 
 1. Clone o repositório
 
    ```bash
-   git clone LINK_DO_REPOSITORIO
+   git clone https://github.com/carolinaduarteneves/skillmatch-web.git
    ```
 
 2. Abra o projeto no VS Code.
